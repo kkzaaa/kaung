@@ -1,0 +1,4 @@
+U001|ADMIN|admin1|pass123|Aisha Rahman|900101-01-1234|0121234567|aisha.admin@hms.com|ACTIVE
+U002|MANAGER|manager1|pass123|Wei Ling Tan|900202-02-2345|0122345678|weiling.manager@hms.com|ACTIVE
+U003|DOCTOR|doctor1|pass123|Dr. Kumar Raj|900303-03-3456|0123456789|kumar.doctor@hms.com|ACTIVE
+U004|PATIENT|patient1|pass123|Siti Aminah|950404-04-4567|0124567890|siti.patient@hms.com|ACTIVE

@@ -1,0 +1,1 @@
+AS001|A001|T001|D001|P001|BP:120/80,Temp:36.8,Weight:60|None|Patient reports mild fatigue.|2026-09-10

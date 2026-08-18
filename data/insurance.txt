@@ -1,0 +1,3 @@
+Great Eastern|ACCEPTED
+AIA|ACCEPTED
+Prudential|NOT_ACCEPTED
