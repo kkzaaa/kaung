@@ -3,6 +3,7 @@ package hms.model;
 import hms.util.Constants;
 
 public class Doctor extends User {
+    private String doctorID;
     private String specialty;
     private String departmentID;
     private String managerID;
@@ -10,12 +11,21 @@ public class Doctor extends User {
 
     public Doctor(String userID, String username, String password, String fullName,
                   String icNumber, String contactNo, String email, String status,
-                  String specialty, String departmentID, String managerID, String shiftSchedule) {
+                  String doctorID, String specialty, String departmentID, String managerID, String shiftSchedule) {
         super(userID, username, password, fullName, icNumber, contactNo, email, status);
+        this.doctorID = doctorID;
         this.specialty = specialty;
         this.departmentID = departmentID;
         this.managerID = managerID;
         this.shiftSchedule = shiftSchedule;
+    }
+
+    public String getDoctorID() {
+        return doctorID;
+    }
+
+    public void setDoctorID(String doctorID) {
+        this.doctorID = doctorID;
     }
 
     @Override

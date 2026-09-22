@@ -31,7 +31,7 @@ public class AuthService {
 
             switch (role) {
                 case Constants.ROLE_ADMIN:
-                    return new Admin(userID, rowUsername, rowPassword, fullName, icNumber, contactNo, email, status);
+                    return buildAdmin(userID, rowUsername, rowPassword, fullName, icNumber, contactNo, email, status);
                 case Constants.ROLE_MANAGER:
                     return buildManager(userID, rowUsername, rowPassword, fullName, icNumber, contactNo, email, status);
                 case Constants.ROLE_DOCTOR:
@@ -45,14 +45,25 @@ public class AuthService {
         return null;
     }
 
+    private Admin buildAdmin(String userID, String username, String password, String fullName,
+                              String icNumber, String contactNo, String email, String status) {
+        for (String[] row : FileHandler.readRecords(Constants.ADMINS_FILE)) {
+            if (row[1].equals(userID)) {
+                return new Admin(userID, username, password, fullName, icNumber, contactNo, email, status, row[0]);
+            }
+        }
+        return new Admin(userID, username, password, fullName, icNumber, contactNo, email, status, "");
+    }
+
     private MedicalManager buildManager(String userID, String username, String password, String fullName,
                                          String icNumber, String contactNo, String email, String status) {
         for (String[] row : FileHandler.readRecords(Constants.MANAGERS_FILE)) {
             if (row[1].equals(userID)) {
-                return new MedicalManager(userID, username, password, fullName, icNumber, contactNo, email, status, row[2]);
+                return new MedicalManager(userID, username, password, fullName, icNumber, contactNo, email, status,
+                        row[0], row[2]);
             }
         }
-        return new MedicalManager(userID, username, password, fullName, icNumber, contactNo, email, status, "");
+        return new MedicalManager(userID, username, password, fullName, icNumber, contactNo, email, status, "", "");
     }
 
     private Doctor buildDoctor(String userID, String username, String password, String fullName,
@@ -60,10 +71,10 @@ public class AuthService {
         for (String[] row : FileHandler.readRecords(Constants.DOCTORS_FILE)) {
             if (row[1].equals(userID)) {
                 return new Doctor(userID, username, password, fullName, icNumber, contactNo, email, status,
-                        row[2], row[3], row[4], row[5]);
+                        row[0], row[2], row[3], row[4], row[5]);
             }
         }
-        return new Doctor(userID, username, password, fullName, icNumber, contactNo, email, status, "", "", "", "");
+        return new Doctor(userID, username, password, fullName, icNumber, contactNo, email, status, "", "", "", "", "");
     }
 
     private Patient buildPatient(String userID, String username, String password, String fullName,
@@ -71,9 +82,9 @@ public class AuthService {
         for (String[] row : FileHandler.readRecords(Constants.PATIENTS_FILE)) {
             if (row[1].equals(userID)) {
                 return new Patient(userID, username, password, fullName, icNumber, contactNo, email, status,
-                        row[2], row[3], row[4], row[5]);
+                        row[0], row[2], row[3], row[4], row[5]);
             }
         }
-        return new Patient(userID, username, password, fullName, icNumber, contactNo, email, status, "", "", "", "");
+        return new Patient(userID, username, password, fullName, icNumber, contactNo, email, status, "", "", "", "", "");
     }
 }

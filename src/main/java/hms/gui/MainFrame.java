@@ -1,7 +1,16 @@
 package hms.gui;
 
+import hms.gui.admin.AdminDashboard;
+import hms.gui.doctor.DoctorDashboard;
+import hms.gui.manager.ManagerDashboard;
+import hms.gui.patient.PatientDashboard;
+import hms.model.Admin;
+import hms.model.Doctor;
+import hms.model.MedicalManager;
+import hms.model.Patient;
 import hms.model.User;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -22,14 +31,26 @@ public class MainFrame extends JFrame {
         cardLayout.show(cardPanel, "LOGIN");
     }
 
-    public void showPanel(JPanel panel, String name) {
+    public void showPanel(JComponent panel, String name) {
         cardPanel.add(panel, name);
         cardLayout.show(cardPanel, name);
     }
 
     public void openDashboardFor(User user) {
         user.showDashboard();
-        // Each role's dashboard panel is added by that module under gui/<role>/
-        // and swapped in here via showPanel(panel, user.getRole()).
+        JComponent dashboard;
+        if (user instanceof Admin admin) {
+            dashboard = new AdminDashboard(admin);
+        } else if (user instanceof MedicalManager manager) {
+            dashboard = new ManagerDashboard(manager);
+        } else if (user instanceof Doctor doctor) {
+            dashboard = new DoctorDashboard(doctor);
+        } else if (user instanceof Patient patient) {
+            dashboard = new PatientDashboard(patient);
+        } else {
+            return;
+        }
+        showPanel(dashboard, user.getRole());
+        setTitle("Hospital Management System — " + user.getFullName() + " (" + user.getRole() + ")");
     }
 }
