@@ -12,6 +12,7 @@ public class PatientDashboard extends JTabbedPane {
         addTab("My Appointments", new MyAppointmentsPanel(patient));
         addTab("Medical History", new MedicalHistoryPanel(patient));
         addTab("Feedback", new FeedbackPanel(patient));
+        addTab("My Bills", new MyBillsPanel(patient));
         addTab("My Profile", new ProfilePanel(patient));
     }
 }

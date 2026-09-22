@@ -13,6 +13,7 @@ public class AdminDashboard extends JTabbedPane {
         addTab("Assign Doctor to Manager", new AssignDoctorPanel());
         addTab("Hospital Assets", new AssetManagementPanel());
         addTab("Rates & Insurance", new RatesInsurancePanel());
+        addTab("Billing", new BillingPanel());
         addTab("My Profile", new ProfilePanel(admin));
     }
 }
