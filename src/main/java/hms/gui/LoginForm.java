@@ -52,5 +52,12 @@ public class LoginForm extends JPanel {
             errorLabel.setText(" ");
             mainFrame.openDashboardFor(user);
         });
+        passwordField.addActionListener(e -> loginButton.doClick());
+    }
+
+    public void clearFields() {
+        usernameField.setText("");
+        passwordField.setText("");
+        errorLabel.setText(" ");
     }
 }

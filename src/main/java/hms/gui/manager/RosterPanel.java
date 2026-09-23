@@ -43,7 +43,7 @@ public class RosterPanel extends JPanel {
         JButton assignButton = new JButton("Assign shift");
         formPanel.add(assignButton);
 
-        formPanel.add(new JLabel("Check conflict — Date"));
+        formPanel.add(new JLabel("Check conflict - Date"));
         formPanel.add(conflictDateField);
         formPanel.add(new JLabel("Time"));
         formPanel.add(conflictTimeField);
@@ -90,6 +90,6 @@ public class RosterPanel extends JPanel {
         boolean conflict = rosterManager.checkConflict(doctorID, date, time);
         JOptionPane.showMessageDialog(this, conflict
                 ? "Conflict: doctor " + doctorID + " already has a booking at that date/time."
-                : "No conflict — slot is free.");
+                : "No conflict - slot is free.");
     }
 }
