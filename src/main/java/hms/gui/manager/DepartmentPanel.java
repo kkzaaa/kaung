@@ -1,5 +1,7 @@
 package hms.gui.manager;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.model.Department;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -33,12 +35,12 @@ public class DepartmentPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel formPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         formPanel.add(new JLabel("Name"));
         formPanel.add(nameField);
         formPanel.add(new JLabel("Manager ID"));
         formPanel.add(managerField);
-        JButton addButton = new JButton("Add department");
+        JButton addButton = UITheme.primaryButton("Add department");
         JButton deleteButton = new JButton("Delete selected");
         JButton refreshButton = new JButton("Refresh");
         formPanel.add(addButton);

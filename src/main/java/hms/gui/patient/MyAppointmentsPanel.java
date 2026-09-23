@@ -1,5 +1,7 @@
 package hms.gui.patient;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.model.Patient;
 import hms.service.PatientService;
 import hms.util.Constants;
@@ -37,12 +39,12 @@ public class MyAppointmentsPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel formPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         formPanel.add(new JLabel("New date"));
         formPanel.add(newDateField);
         formPanel.add(new JLabel("New time"));
         formPanel.add(newTimeField);
-        JButton rescheduleButton = new JButton("Reschedule selected");
+        JButton rescheduleButton = UITheme.primaryButton("Reschedule selected");
         JButton cancelButton = new JButton("Cancel selected");
         JButton refreshButton = new JButton("Refresh");
         formPanel.add(rescheduleButton);

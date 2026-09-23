@@ -1,5 +1,7 @@
 package hms.gui.doctor;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.model.Doctor;
 import hms.model.LabRequest;
 import hms.service.DoctorService;
@@ -41,12 +43,12 @@ public class LabRequestPanel extends JPanel {
         this.doctor = doctor;
         setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel formPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         formPanel.add(new JLabel("Patient"));
         formPanel.add(patientBox);
         formPanel.add(new JLabel("Test type"));
         formPanel.add(testTypeBox);
-        JButton submitButton = new JButton("Submit request to Admin");
+        JButton submitButton = UITheme.primaryButton("Submit request to Admin");
         JButton refreshButton = new JButton("Refresh");
         formPanel.add(submitButton);
         formPanel.add(refreshButton);

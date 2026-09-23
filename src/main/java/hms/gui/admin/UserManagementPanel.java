@@ -1,5 +1,7 @@
 package hms.gui.admin;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.service.UserManager;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -36,7 +38,7 @@ public class UserManagementPanel extends JPanel {
     public UserManagementPanel() {
         setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel topPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         topPanel.add(new JLabel("Filter by role:"));
         topPanel.add(filterBox);
         JButton refreshButton = new JButton("Refresh");
@@ -45,10 +47,10 @@ public class UserManagementPanel extends JPanel {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel bottomPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         bottomPanel.add(new JLabel("New status:"));
         bottomPanel.add(statusBox);
-        JButton updateStatusButton = new JButton("Update status of selected");
+        JButton updateStatusButton = UITheme.primaryButton("Update status of selected");
         JButton deleteButton = new JButton("Delete selected");
         bottomPanel.add(updateStatusButton);
         bottomPanel.add(deleteButton);

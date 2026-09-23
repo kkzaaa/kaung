@@ -38,7 +38,7 @@ public class ProfilePanel extends JPanel {
         addRow(gbc, 2, "Email", emailField);
         addRow(gbc, 3, "Password", passwordField);
 
-        JButton saveButton = new JButton("Save changes");
+        JButton saveButton = UITheme.primaryButton("Save changes");
         gbc.gridx = 1;
         gbc.gridy = 4;
         add(saveButton, gbc);

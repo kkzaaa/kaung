@@ -1,5 +1,6 @@
 package hms.gui.patient;
 
+import hms.gui.WrapLayout;
 import hms.model.Patient;
 import hms.service.BillingService;
 
@@ -29,7 +30,7 @@ public class MyBillsPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel bottomPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         JButton refreshButton = new JButton("Refresh");
         bottomPanel.add(refreshButton);
         add(bottomPanel, BorderLayout.SOUTH);

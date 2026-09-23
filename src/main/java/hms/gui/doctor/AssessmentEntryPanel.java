@@ -1,5 +1,6 @@
 package hms.gui.doctor;
 
+import hms.gui.UITheme;
 import hms.model.Assessment;
 import hms.model.AssessmentType;
 import hms.model.Doctor;
@@ -80,7 +81,7 @@ public class AssessmentEntryPanel extends JPanel {
         gbc.gridx = 1;
         add(new JScrollPane(notesArea), gbc);
 
-        JButton saveButton = new JButton("Save assessment");
+        JButton saveButton = UITheme.primaryButton("Save assessment");
         JButton refreshButton = new JButton("Refresh appointments");
         gbc.gridx = 0;
         gbc.gridy = 5;

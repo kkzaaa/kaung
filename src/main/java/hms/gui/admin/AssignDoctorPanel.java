@@ -1,5 +1,6 @@
 package hms.gui.admin;
 
+import hms.gui.UITheme;
 import hms.util.Constants;
 import hms.util.FileHandler;
 
@@ -36,7 +37,7 @@ public class AssignDoctorPanel extends JPanel {
         gbc.gridx = 1;
         add(managerBox, gbc);
 
-        JButton assignButton = new JButton("Assign");
+        JButton assignButton = UITheme.primaryButton("Assign");
         gbc.gridx = 1;
         gbc.gridy = 2;
         add(assignButton, gbc);

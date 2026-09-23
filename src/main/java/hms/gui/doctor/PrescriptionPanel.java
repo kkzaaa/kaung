@@ -1,5 +1,6 @@
 package hms.gui.doctor;
 
+import hms.gui.UITheme;
 import hms.model.Doctor;
 import hms.model.Prescription;
 import hms.service.DoctorService;
@@ -61,7 +62,7 @@ public class PrescriptionPanel extends JPanel {
         add(instructionsField, gbc);
 
         JButton refreshButton = new JButton("Refresh assessments");
-        JButton issueButton = new JButton("Issue prescription");
+        JButton issueButton = UITheme.primaryButton("Issue prescription");
         gbc.gridx = 0;
         gbc.gridy = 4;
         add(refreshButton, gbc);

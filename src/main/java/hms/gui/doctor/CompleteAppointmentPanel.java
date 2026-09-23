@@ -1,5 +1,6 @@
 package hms.gui.doctor;
 
+import hms.gui.UITheme;
 import hms.model.ClinicalFeedback;
 import hms.model.Doctor;
 import hms.service.DoctorService;
@@ -50,7 +51,7 @@ public class CompleteAppointmentPanel extends JPanel {
         add(new JScrollPane(feedbackArea), gbc);
 
         JButton refreshButton = new JButton("Refresh");
-        JButton completeButton = new JButton("Mark completed & send feedback");
+        JButton completeButton = UITheme.primaryButton("Mark completed & send feedback");
         gbc.gridx = 0;
         gbc.gridy = 2;
         add(refreshButton, gbc);

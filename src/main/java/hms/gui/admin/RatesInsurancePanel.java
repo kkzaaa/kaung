@@ -1,5 +1,6 @@
 package hms.gui.admin;
 
+import hms.gui.UITheme;
 import hms.service.RateConfig;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -60,7 +61,7 @@ public class RatesInsurancePanel extends JPanel {
         rateForm.add(new JLabel("Amount"), gbc);
         gbc.gridx = 1;
         rateForm.add(amountField, gbc);
-        JButton setRateButton = new JButton("Set rate");
+        JButton setRateButton = UITheme.primaryButton("Set rate");
         gbc.gridx = 1;
         gbc.gridy = 2;
         rateForm.add(setRateButton, gbc);

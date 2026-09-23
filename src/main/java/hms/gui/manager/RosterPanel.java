@@ -1,5 +1,7 @@
 package hms.gui.manager;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.service.RosterManager;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -14,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 public class RosterPanel extends JPanel {
     private final RosterManager rosterManager = new RosterManager();
@@ -35,23 +38,27 @@ public class RosterPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        formPanel.add(new JLabel("Doctor ID"));
-        formPanel.add(doctorIdField);
-        formPanel.add(new JLabel("Shift schedule (e.g. Mon-Fri 09:00-17:00)"));
-        formPanel.add(shiftField);
-        JButton assignButton = new JButton("Assign shift");
-        formPanel.add(assignButton);
+        JPanel assignRow = new JPanel(new WrapLayout(FlowLayout.LEFT));
+        assignRow.add(new JLabel("Doctor ID"));
+        assignRow.add(doctorIdField);
+        assignRow.add(new JLabel("Shift schedule (e.g. Mon-Fri 09:00-17:00)"));
+        assignRow.add(shiftField);
+        JButton assignButton = UITheme.primaryButton("Assign shift");
+        assignRow.add(assignButton);
 
-        formPanel.add(new JLabel("Check conflict - Date"));
-        formPanel.add(conflictDateField);
-        formPanel.add(new JLabel("Time"));
-        formPanel.add(conflictTimeField);
+        JPanel conflictRow = new JPanel(new WrapLayout(FlowLayout.LEFT));
+        conflictRow.add(new JLabel("Check conflict for the doctor above - Date"));
+        conflictRow.add(conflictDateField);
+        conflictRow.add(new JLabel("Time"));
+        conflictRow.add(conflictTimeField);
         JButton checkButton = new JButton("Check conflict");
-        formPanel.add(checkButton);
-
+        conflictRow.add(checkButton);
         JButton refreshButton = new JButton("Refresh");
-        formPanel.add(refreshButton);
+        conflictRow.add(refreshButton);
+
+        JPanel formPanel = new JPanel(new GridLayout(2, 1));
+        formPanel.add(assignRow);
+        formPanel.add(conflictRow);
         add(formPanel, BorderLayout.SOUTH);
 
         assignButton.addActionListener(e -> assignShift());

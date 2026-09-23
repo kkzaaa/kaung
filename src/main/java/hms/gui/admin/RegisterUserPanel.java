@@ -1,5 +1,6 @@
 package hms.gui.admin;
 
+import hms.gui.UITheme;
 import hms.model.Admin;
 import hms.model.Doctor;
 import hms.model.MedicalManager;
@@ -68,7 +69,7 @@ public class RegisterUserPanel extends JPanel {
         add(extraPanel, gbc);
         gbc.gridwidth = 1;
 
-        JButton registerButton = new JButton("Register user");
+        JButton registerButton = UITheme.primaryButton("Register user");
         gbc.gridx = 1;
         gbc.gridy = 8;
         add(registerButton, gbc);

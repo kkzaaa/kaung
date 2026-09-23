@@ -1,5 +1,7 @@
 package hms.gui.doctor;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.model.Doctor;
 import hms.service.DoctorService;
 
@@ -33,11 +35,11 @@ public class TodaysAppointmentsPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel topPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         topPanel.add(new JLabel("Date (YYYY-MM-DD)"));
         dateField.setText(LocalDate.now().toString());
         topPanel.add(dateField);
-        JButton loadButton = new JButton("Load appointments");
+        JButton loadButton = UITheme.primaryButton("Load appointments");
         topPanel.add(loadButton);
         add(topPanel, BorderLayout.NORTH);
 

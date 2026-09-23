@@ -1,5 +1,7 @@
 package hms.gui.manager;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.model.AssessmentType;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -37,7 +39,7 @@ public class AssessmentTypePanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel formPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         formPanel.add(new JLabel("Name"));
         formPanel.add(nameField);
         for (String option : FIELD_OPTIONS) {
@@ -45,7 +47,7 @@ public class AssessmentTypePanel extends JPanel {
             fieldChecks.add(box);
             formPanel.add(box);
         }
-        JButton addButton = new JButton("Add assessment type");
+        JButton addButton = UITheme.primaryButton("Add assessment type");
         JButton refreshButton = new JButton("Refresh");
         formPanel.add(addButton);
         formPanel.add(refreshButton);

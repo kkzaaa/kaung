@@ -1,5 +1,7 @@
 package hms.gui.admin;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.util.Constants;
 import hms.util.FileHandler;
 
@@ -32,7 +34,7 @@ public class LabRequestsPanel extends JPanel {
     public LabRequestsPanel() {
         setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel topPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         topPanel.add(new JLabel("Show:"));
         topPanel.add(filterBox);
         JButton refreshButton = new JButton("Refresh");
@@ -41,10 +43,10 @@ public class LabRequestsPanel extends JPanel {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel bottomPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         bottomPanel.add(new JLabel("Set status of selected request to"));
         bottomPanel.add(statusBox);
-        JButton updateButton = new JButton("Update");
+        JButton updateButton = UITheme.primaryButton("Update");
         bottomPanel.add(updateButton);
         add(bottomPanel, BorderLayout.SOUTH);
 

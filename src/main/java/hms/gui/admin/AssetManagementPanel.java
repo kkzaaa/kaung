@@ -1,5 +1,7 @@
 package hms.gui.admin;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.model.Ward;
 import hms.service.AssetManager;
 import hms.util.Constants;
@@ -7,6 +9,7 @@ import hms.util.FileHandler;
 import hms.util.IdGenerator;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +36,8 @@ public class AssetManagementPanel extends JPanel {
     private final JTable table = new JTable(tableModel);
 
     private final JTextField nameField = new JTextField(15);
-    private final JTextField typeField = new JTextField(15);
+    private final JComboBox<String> typeBox = new JComboBox<>(
+            new String[] { "WARD", "CONSULTATION_ROOM", "LAB", "IMAGING_ROOM" });
     private final JTextField capacityField = new JTextField(6);
     private final JTextField statusField = new JTextField(10);
 
@@ -52,9 +56,9 @@ public class AssetManagementPanel extends JPanel {
         gbc.gridx = 1;
         formPanel.add(nameField, gbc);
         gbc.gridx = 2;
-        formPanel.add(new JLabel("Type (WARD/CONSULTATION_ROOM/LAB/IMAGING_ROOM)"), gbc);
+        formPanel.add(new JLabel("Type"), gbc);
         gbc.gridx = 3;
-        formPanel.add(typeField, gbc);
+        formPanel.add(typeBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -67,8 +71,8 @@ public class AssetManagementPanel extends JPanel {
         formPanel.add(statusField, gbc);
         statusField.setText("AVAILABLE");
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton addButton = new JButton("Add asset");
+        JPanel buttonPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
+        JButton addButton = UITheme.primaryButton("Add asset");
         JButton updateStatusButton = new JButton("Update status of selected");
         JButton refreshButton = new JButton("Refresh");
         buttonPanel.add(addButton);
@@ -96,7 +100,7 @@ public class AssetManagementPanel extends JPanel {
 
     private void addAsset() {
         String name = nameField.getText().trim();
-        String type = typeField.getText().trim().toUpperCase();
+        String type = (String) typeBox.getSelectedItem();
         String capacityText = capacityField.getText().trim();
         String status = statusField.getText().trim().toUpperCase();
 
@@ -116,7 +120,6 @@ public class AssetManagementPanel extends JPanel {
         assetManager.addWard(new Ward(assetID, name, type, capacity, status.isBlank() ? "AVAILABLE" : status));
         loadAssets();
         nameField.setText("");
-        typeField.setText("");
         capacityField.setText("");
     }
 

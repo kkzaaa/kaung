@@ -1,5 +1,6 @@
 package hms.gui.patient;
 
+import hms.gui.UITheme;
 import hms.model.Feedback;
 import hms.model.Patient;
 import hms.service.PatientService;
@@ -55,7 +56,7 @@ public class FeedbackPanel extends JPanel {
         add(new JScrollPane(commentArea), gbc);
 
         JButton refreshButton = new JButton("Refresh");
-        JButton submitButton = new JButton("Submit feedback");
+        JButton submitButton = UITheme.primaryButton("Submit feedback");
         gbc.gridx = 0;
         gbc.gridy = 3;
         add(refreshButton, gbc);

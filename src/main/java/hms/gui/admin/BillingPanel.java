@@ -1,5 +1,7 @@
 package hms.gui.admin;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.service.BillingService;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -35,12 +37,12 @@ public class BillingPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel formPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         formPanel.add(new JLabel("Appointment"));
         formPanel.add(apptBox);
         formPanel.add(new JLabel("Insurance"));
         formPanel.add(insuranceBox);
-        JButton generateButton = new JButton("Generate bill (rate = doctor's department)");
+        JButton generateButton = UITheme.primaryButton("Generate bill");
         JButton markPaidButton = new JButton("Mark selected as PAID");
         JButton refreshButton = new JButton("Refresh");
         formPanel.add(generateButton);

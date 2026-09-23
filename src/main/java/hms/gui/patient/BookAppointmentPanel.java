@@ -1,5 +1,6 @@
 package hms.gui.patient;
 
+import hms.gui.UITheme;
 import hms.model.Appointment;
 import hms.model.Patient;
 import hms.service.PatientService;
@@ -84,7 +85,7 @@ public class BookAppointmentPanel extends JPanel {
         gbc.gridx = 1;
         formPanel.add(roomField, gbc);
 
-        JButton bookButton = new JButton("Book appointment");
+        JButton bookButton = UITheme.primaryButton("Book appointment");
         JButton refreshButton = new JButton("Refresh");
         gbc.gridx = 0;
         gbc.gridy = 5;

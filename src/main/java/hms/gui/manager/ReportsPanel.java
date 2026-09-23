@@ -1,5 +1,7 @@
 package hms.gui.manager;
 
+import hms.gui.WrapLayout;
+import hms.gui.UITheme;
 import hms.service.ReportGenerator;
 import hms.util.Constants;
 import hms.util.FileHandler;
@@ -32,11 +34,11 @@ public class ReportsPanel extends JPanel {
     public ReportsPanel() {
         setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel topPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
         topPanel.add(revenueLabel);
         topPanel.add(new JLabel("   Report:"));
         topPanel.add(reportBox);
-        JButton runButton = new JButton("Run report");
+        JButton runButton = UITheme.primaryButton("Run report");
         topPanel.add(runButton);
         add(topPanel, BorderLayout.NORTH);
 
