@@ -14,6 +14,7 @@ public class AdminDashboard extends JTabbedPane {
         addTab("Hospital Assets", new AssetManagementPanel());
         addTab("Rates & Insurance", new RatesInsurancePanel());
         addTab("Billing", new BillingPanel());
+        addTab("Lab Requests", new LabRequestsPanel());
         addTab("My Profile", new ProfilePanel(admin));
     }
 }

@@ -39,6 +39,21 @@ public class ReportGenerator {
         return workload;
     }
 
+    public Map<String, Double> getAverageRatingByDoctor() {
+        Map<String, Integer> totals = new HashMap<>();
+        Map<String, Integer> counts = new HashMap<>();
+        for (String[] row : FileHandler.readRecords(Constants.FEEDBACK_FILE)) {
+            String doctorID = row[2];
+            totals.merge(doctorID, Integer.parseInt(row[4]), Integer::sum);
+            counts.merge(doctorID, 1, Integer::sum);
+        }
+        Map<String, Double> averages = new HashMap<>();
+        for (String doctorID : totals.keySet()) {
+            averages.put(doctorID, (double) totals.get(doctorID) / counts.get(doctorID));
+        }
+        return averages;
+    }
+
     public List<String[]> generateReport(String type) {
         switch (type) {
             case "APPOINTMENTS":

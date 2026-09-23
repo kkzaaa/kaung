@@ -9,6 +9,7 @@ import hms.service.UserManager;
 import hms.util.Constants;
 import hms.util.FileHandler;
 import hms.util.IdGenerator;
+import hms.util.Validator;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -126,8 +127,26 @@ public class RegisterUserPanel extends JPanel {
         String email = emailField.getText().trim();
         String role = (String) roleBox.getSelectedItem();
 
-        if (username.isBlank() || password.isBlank() || fullName.isBlank() || email.isBlank()) {
+        if (username.isBlank() || password.isBlank() || fullName.isBlank() || email.isBlank()
+                || ic.isBlank() || contact.isBlank()) {
             JOptionPane.showMessageDialog(this, "Please fill in all required fields.");
+            return;
+        }
+        if (!Validator.isValidEmail(email)) {
+            JOptionPane.showMessageDialog(this, "Invalid email format (e.g. name@hms.com).");
+            return;
+        }
+        if (!Validator.isValidIC(ic)) {
+            JOptionPane.showMessageDialog(this, "Invalid IC number format (e.g. 900101-01-1234).");
+            return;
+        }
+        if (!Validator.isValidContact(contact)) {
+            JOptionPane.showMessageDialog(this, "Invalid contact number (digits only, e.g. 0121234567).");
+            return;
+        }
+        if (role.equals(Constants.ROLE_PATIENT) && !dobField.getText().isBlank()
+                && !Validator.isValidDate(dobField.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Date of birth must be YYYY-MM-DD.");
             return;
         }
         if (userManager.isUsernameTaken(username)) {

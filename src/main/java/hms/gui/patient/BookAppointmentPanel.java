@@ -6,6 +6,7 @@ import hms.service.PatientService;
 import hms.util.Constants;
 import hms.util.FileHandler;
 import hms.util.IdGenerator;
+import hms.util.Validator;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -21,6 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class BookAppointmentPanel extends JPanel {
@@ -28,12 +31,13 @@ public class BookAppointmentPanel extends JPanel {
     private final Patient patient;
 
     private final JComboBox<String> doctorBox = new JComboBox<>();
+    private final JLabel shiftLabel = new JLabel(" ");
     private final JTextField dateField = new JTextField(10);
     private final JTextField timeField = new JTextField(6);
     private final JTextField roomField = new JTextField(8);
 
     private final DefaultTableModel scheduleModel = new DefaultTableModel(
-            new String[] { "Appt ID", "Doctor ID", "Date", "Time", "Room", "Status" }, 0) {
+            new String[] { "Appt ID", "Date", "Time", "Room", "Status" }, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
@@ -58,63 +62,109 @@ public class BookAppointmentPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
+        formPanel.add(new JLabel("Working hours"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(shiftLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         formPanel.add(new JLabel("Date (YYYY-MM-DD)"), gbc);
         gbc.gridx = 1;
         formPanel.add(dateField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         formPanel.add(new JLabel("Time (HH:MM)"), gbc);
         gbc.gridx = 1;
         formPanel.add(timeField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
-        formPanel.add(new JLabel("Room ID"), gbc);
+        gbc.gridy = 4;
+        formPanel.add(new JLabel("Room ID (optional)"), gbc);
         gbc.gridx = 1;
         formPanel.add(roomField, gbc);
 
         JButton bookButton = new JButton("Book appointment");
-        JButton refreshButton = new JButton("Refresh doctors/schedule");
+        JButton refreshButton = new JButton("Refresh");
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         formPanel.add(refreshButton, gbc);
         gbc.gridx = 1;
         formPanel.add(bookButton, gbc);
 
         add(formPanel, BorderLayout.NORTH);
-        add(new JScrollPane(scheduleTable), BorderLayout.CENTER);
 
+        JPanel schedulePanel = new JPanel(new BorderLayout());
+        schedulePanel.add(new JLabel("Slots already taken for this doctor"), BorderLayout.NORTH);
+        schedulePanel.add(new JScrollPane(scheduleTable), BorderLayout.CENTER);
+        add(schedulePanel, BorderLayout.CENTER);
+
+        doctorBox.addActionListener(e -> loadSchedule());
         bookButton.addActionListener(e -> bookAppointment());
-        refreshButton.addActionListener(e -> loadData());
+        refreshButton.addActionListener(e -> loadDoctors());
 
-        loadData();
+        loadDoctors();
     }
 
-    private void loadData() {
-        Vector<String> doctorIDs = new Vector<>();
-        for (String[] row : FileHandler.readRecords(Constants.DOCTORS_FILE)) {
-            doctorIDs.add(row[0]);
+    private void loadDoctors() {
+        Map<String, String> namesByUserID = new HashMap<>();
+        for (String[] row : FileHandler.readRecords(Constants.USERS_FILE)) {
+            namesByUserID.put(row[0], row[4]);
         }
-        doctorBox.setModel(new DefaultComboBoxModel<>(doctorIDs));
 
+        Vector<String> doctors = new Vector<>();
+        for (String[] row : FileHandler.readRecords(Constants.DOCTORS_FILE)) {
+            String name = namesByUserID.getOrDefault(row[1], "Unknown");
+            doctors.add(row[0] + " - " + name + " (" + row[2] + ")");
+        }
+        doctorBox.setModel(new DefaultComboBoxModel<>(doctors));
+        loadSchedule();
+    }
+
+    private String selectedDoctorID() {
+        String selected = (String) doctorBox.getSelectedItem();
+        return selected == null ? null : selected.split(" - ")[0];
+    }
+
+    private void loadSchedule() {
         scheduleModel.setRowCount(0);
-        String selectedDoctor = (String) doctorBox.getSelectedItem();
+        String doctorID = selectedDoctorID();
+        shiftLabel.setText(" ");
+        if (doctorID == null) {
+            return;
+        }
+        for (String[] row : FileHandler.readRecords(Constants.DOCTORS_FILE)) {
+            if (row[0].equals(doctorID)) {
+                shiftLabel.setText(row[5].isBlank() ? "Not set" : row[5]);
+            }
+        }
         for (String[] row : FileHandler.readRecords(Constants.APPOINTMENTS_FILE)) {
-            if (selectedDoctor == null || row[2].equals(selectedDoctor)) {
-                scheduleModel.addRow(new Object[] { row[0], row[2], row[3], row[4], row[5], row[6] });
+            if (row[2].equals(doctorID) && !row[6].equals(Constants.STATUS_CANCELLED)) {
+                scheduleModel.addRow(new Object[] { row[0], row[3], row[4], row[5], row[6] });
             }
         }
     }
 
     private void bookAppointment() {
-        String doctorID = (String) doctorBox.getSelectedItem();
+        String doctorID = selectedDoctorID();
         String date = dateField.getText().trim();
         String time = timeField.getText().trim();
         String room = roomField.getText().trim();
 
         if (doctorID == null || date.isBlank() || time.isBlank()) {
             JOptionPane.showMessageDialog(this, "Select a doctor and enter date and time.");
+            return;
+        }
+        if (!Validator.isValidDate(date)) {
+            JOptionPane.showMessageDialog(this, "Date must be in YYYY-MM-DD format.");
+            return;
+        }
+        if (Validator.isPastDate(date)) {
+            JOptionPane.showMessageDialog(this, "You cannot book an appointment in the past.");
+            return;
+        }
+        if (!Validator.isValidTime(time)) {
+            JOptionPane.showMessageDialog(this, "Time must be in HH:MM format (e.g. 09:30).");
             return;
         }
         if (!patientService.isSlotAvailable(doctorID, date, time)) {
@@ -131,6 +181,6 @@ public class BookAppointmentPanel extends JPanel {
         dateField.setText("");
         timeField.setText("");
         roomField.setText("");
-        loadData();
+        loadSchedule();
     }
 }

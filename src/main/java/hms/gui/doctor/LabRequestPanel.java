@@ -4,66 +4,90 @@ import hms.model.Doctor;
 import hms.model.LabRequest;
 import hms.service.DoctorService;
 import hms.util.Constants;
+import hms.util.FileHandler;
 import hms.util.IdGenerator;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.time.LocalDate;
+import java.util.Vector;
 
 public class LabRequestPanel extends JPanel {
     private final DoctorService doctorService = new DoctorService();
     private final Doctor doctor;
 
-    private final JTextField patientIdField = new JTextField(15);
-    private final JTextField testTypeField = new JTextField(20);
+    private final JComboBox<String> patientBox = new JComboBox<>();
+    private final JComboBox<String> testTypeBox = new JComboBox<>(
+            new String[] { "Blood Test", "Urine Test", "X-Ray", "CT Scan", "MRI", "ECG" });
+
+    private final DefaultTableModel tableModel = new DefaultTableModel(
+            new String[] { "Request ID", "Patient ID", "Test type", "Status", "Date" }, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
 
     public LabRequestPanel(Doctor doctor) {
         this.doctor = doctor;
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(6, 6, 6, 6);
-        gbc.anchor = GridBagConstraints.WEST;
+        setLayout(new BorderLayout());
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        add(new JLabel("Patient ID"), gbc);
-        gbc.gridx = 1;
-        add(patientIdField, gbc);
+        JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        formPanel.add(new JLabel("Patient"));
+        formPanel.add(patientBox);
+        formPanel.add(new JLabel("Test type"));
+        formPanel.add(testTypeBox);
+        JButton submitButton = new JButton("Submit request to Admin");
+        JButton refreshButton = new JButton("Refresh");
+        formPanel.add(submitButton);
+        formPanel.add(refreshButton);
+        add(formPanel, BorderLayout.NORTH);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(new JLabel("Test type (e.g. Blood Test, X-Ray)"), gbc);
-        gbc.gridx = 1;
-        add(testTypeField, gbc);
-
-        JButton submitButton = new JButton("Submit request");
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        add(submitButton, gbc);
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.add(new JLabel("My lab/X-ray requests (status is updated by Admin)"), BorderLayout.NORTH);
+        tablePanel.add(new JScrollPane(new JTable(tableModel)), BorderLayout.CENTER);
+        add(tablePanel, BorderLayout.CENTER);
 
         submitButton.addActionListener(e -> submitRequest());
+        refreshButton.addActionListener(e -> loadData());
+
+        loadData();
+    }
+
+    private void loadData() {
+        Vector<String> patientIDs = new Vector<>();
+        for (String[] row : FileHandler.readRecords(Constants.PATIENTS_FILE)) {
+            patientIDs.add(row[0]);
+        }
+        patientBox.setModel(new DefaultComboBoxModel<>(patientIDs));
+
+        tableModel.setRowCount(0);
+        for (String[] row : doctorService.getLabRequestsByDoctor(doctor.getDoctorID())) {
+            tableModel.addRow(new Object[] { row[0], row[2], row[3], row[4], row[5] });
+        }
     }
 
     private void submitRequest() {
-        String patientID = patientIdField.getText().trim();
-        String testType = testTypeField.getText().trim();
-        if (patientID.isBlank() || testType.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Enter patient ID and test type.");
+        String patientID = (String) patientBox.getSelectedItem();
+        String testType = (String) testTypeBox.getSelectedItem();
+        if (patientID == null) {
+            JOptionPane.showMessageDialog(this, "No patients registered yet.");
             return;
         }
         String requestID = IdGenerator.nextId(Constants.LAB_REQUESTS_FILE, "LR");
-        LabRequest labRequest = new LabRequest(requestID, doctor.getDoctorID(), patientID, testType,
-                "PENDING", LocalDate.now().toString());
-        doctorService.requestLabTest(labRequest);
+        doctorService.requestLabTest(new LabRequest(requestID, doctor.getDoctorID(), patientID, testType,
+                Constants.LAB_PENDING, LocalDate.now().toString()));
 
         JOptionPane.showMessageDialog(this, "Lab request " + requestID + " submitted to Admin.");
-        patientIdField.setText("");
-        testTypeField.setText("");
+        loadData();
     }
 }

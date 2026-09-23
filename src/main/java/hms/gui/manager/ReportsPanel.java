@@ -19,7 +19,7 @@ public class ReportsPanel extends JPanel {
     private final ReportGenerator reportGenerator = new ReportGenerator();
     private final JLabel revenueLabel = new JLabel("Total revenue: -");
     private final JComboBox<String> reportBox = new JComboBox<>(new String[] {
-            "Appointment count by department", "Doctor workload" });
+            "Appointment count by department", "Doctor workload", "Average rating by doctor" });
 
     private final DefaultTableModel tableModel = new DefaultTableModel(new String[] { "Key", "Count" }, 0) {
         @Override
@@ -42,7 +42,10 @@ public class ReportsPanel extends JPanel {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        runButton.addActionListener(e -> runReport());
+        runButton.addActionListener(e -> {
+            refreshRevenue();
+            runReport();
+        });
 
         refreshRevenue();
         runReport();
@@ -57,11 +60,21 @@ public class ReportsPanel extends JPanel {
     private void runReport() {
         tableModel.setRowCount(0);
         String selected = (String) reportBox.getSelectedItem();
-        Map<String, Integer> data = "Doctor workload".equals(selected)
-                ? reportGenerator.getDoctorWorkload()
-                : reportGenerator.getAppointmentCountByDept();
-        for (Map.Entry<String, Integer> entry : data.entrySet()) {
-            tableModel.addRow(new Object[] { entry.getKey(), entry.getValue() });
+        if ("Average rating by doctor".equals(selected)) {
+            tableModel.setColumnIdentifiers(new String[] { "Doctor ID", "Average rating (out of 5)" });
+            for (Map.Entry<String, Double> entry : reportGenerator.getAverageRatingByDoctor().entrySet()) {
+                tableModel.addRow(new Object[] { entry.getKey(), String.format("%.1f", entry.getValue()) });
+            }
+        } else if ("Doctor workload".equals(selected)) {
+            tableModel.setColumnIdentifiers(new String[] { "Doctor ID", "Appointments" });
+            for (Map.Entry<String, Integer> entry : reportGenerator.getDoctorWorkload().entrySet()) {
+                tableModel.addRow(new Object[] { entry.getKey(), entry.getValue() });
+            }
+        } else {
+            tableModel.setColumnIdentifiers(new String[] { "Department ID", "Appointments" });
+            for (Map.Entry<String, Integer> entry : reportGenerator.getAppointmentCountByDept().entrySet()) {
+                tableModel.addRow(new Object[] { entry.getKey(), entry.getValue() });
+            }
         }
     }
 }

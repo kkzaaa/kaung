@@ -12,6 +12,7 @@ public class DoctorDashboard extends JTabbedPane {
         addTab("Record Assessment", new AssessmentEntryPanel(doctor));
         addTab("Issue Prescription", new PrescriptionPanel(doctor));
         addTab("Lab/X-Ray Request", new LabRequestPanel(doctor));
+        addTab("Complete Appointment", new CompleteAppointmentPanel(doctor));
         addTab("My Profile", new ProfilePanel(doctor));
     }
 }

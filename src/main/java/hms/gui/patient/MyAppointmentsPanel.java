@@ -4,6 +4,7 @@ import hms.model.Patient;
 import hms.service.PatientService;
 import hms.util.Constants;
 import hms.util.FileHandler;
+import hms.util.Validator;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -88,6 +89,19 @@ public class MyAppointmentsPanel extends JPanel {
         String newTime = newTimeField.getText().trim();
         if (newDate.isBlank() || newTime.isBlank()) {
             JOptionPane.showMessageDialog(this, "Enter a new date and time.");
+            return;
+        }
+        if (!Validator.isValidDate(newDate) || !Validator.isValidTime(newTime)) {
+            JOptionPane.showMessageDialog(this, "Use YYYY-MM-DD for date and HH:MM for time.");
+            return;
+        }
+        if (Validator.isPastDate(newDate)) {
+            JOptionPane.showMessageDialog(this, "You cannot reschedule to a past date.");
+            return;
+        }
+        String doctorID = (String) tableModel.getValueAt(table.getSelectedRow(), 1);
+        if (!patientService.isSlotAvailable(doctorID, newDate, newTime)) {
+            JOptionPane.showMessageDialog(this, "The doctor is already booked at that time. Choose another slot.");
             return;
         }
         patientService.rescheduleAppointment(apptID, newDate, newTime);

@@ -1,6 +1,7 @@
 package hms.service;
 
 import hms.model.Assessment;
+import hms.model.ClinicalFeedback;
 import hms.model.LabRequest;
 import hms.model.Prescription;
 import hms.util.Constants;
@@ -31,5 +32,30 @@ public class DoctorService {
 
     public void requestLabTest(LabRequest labRequest) {
         FileHandler.appendRecord(Constants.LAB_REQUESTS_FILE, labRequest.toFields());
+    }
+
+    public List<String[]> getLabRequestsByDoctor(String doctorID) {
+        List<String[]> matches = new ArrayList<>();
+        for (String[] row : FileHandler.readRecords(Constants.LAB_REQUESTS_FILE)) {
+            if (row[1].equals(doctorID)) {
+                matches.add(row);
+            }
+        }
+        return matches;
+    }
+
+    public void completeAppointment(String apptID) {
+        List<String[]> records = FileHandler.readRecords(Constants.APPOINTMENTS_FILE);
+        for (String[] row : records) {
+            if (row[0].equals(apptID)) {
+                row[6] = Constants.STATUS_COMPLETED;
+                break;
+            }
+        }
+        FileHandler.rewriteFile(Constants.APPOINTMENTS_FILE, records);
+    }
+
+    public void giveClinicalFeedback(ClinicalFeedback feedback) {
+        FileHandler.appendRecord(Constants.CLINICAL_FEEDBACK_FILE, feedback.toFields());
     }
 }

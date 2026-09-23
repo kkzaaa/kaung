@@ -20,6 +20,11 @@ public class Constants {
     public static final String FEEDBACK_FILE = DATA_DIR + "feedback.txt";
     public static final String RATES_FILE = DATA_DIR + "rates.txt";
     public static final String INSURANCE_FILE = DATA_DIR + "insurance.txt";
+    public static final String CLINICAL_FEEDBACK_FILE = DATA_DIR + "clinicalFeedback.txt";
+
+    public static final String LAB_PENDING = "PENDING";
+    public static final String LAB_IN_PROGRESS = "IN_PROGRESS";
+    public static final String LAB_COMPLETED = "COMPLETED";
 
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_MANAGER = "MANAGER";

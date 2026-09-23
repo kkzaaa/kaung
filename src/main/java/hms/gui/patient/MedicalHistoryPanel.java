@@ -18,40 +18,44 @@ public class MedicalHistoryPanel extends JPanel {
     private final PatientService patientService = new PatientService();
     private final Patient patient;
 
-    private final DefaultTableModel assessmentsModel = new DefaultTableModel(
-            new String[] { "Assessment ID", "Doctor ID", "Vitals", "Lab results", "Notes", "Date" }, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-    private final DefaultTableModel prescriptionsModel = new DefaultTableModel(
-            new String[] { "Rx ID", "Doctor ID", "Medication", "Dosage", "Instructions", "Date" }, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
+    private final DefaultTableModel assessmentsModel = readOnlyModel(
+            "Assessment ID", "Doctor ID", "Vitals", "Lab results", "Notes", "Date");
+    private final DefaultTableModel prescriptionsModel = readOnlyModel(
+            "Rx ID", "Doctor ID", "Medication", "Dosage", "Instructions", "Date");
+    private final DefaultTableModel clinicalFeedbackModel = readOnlyModel(
+            "Appt ID", "Doctor ID", "Doctor's feedback", "Date");
 
     public MedicalHistoryPanel(Patient patient) {
         this.patient = patient;
-        setLayout(new GridLayout(2, 1, 5, 5));
+        setLayout(new BorderLayout());
 
-        JPanel assessmentsPanel = new JPanel(new BorderLayout());
-        assessmentsPanel.add(new JLabel("Assessment history"), BorderLayout.NORTH);
-        assessmentsPanel.add(new JScrollPane(new JTable(assessmentsModel)), BorderLayout.CENTER);
+        JPanel tablesPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        tablesPanel.add(titledTable("Assessment history", assessmentsModel));
+        tablesPanel.add(titledTable("Prescriptions", prescriptionsModel));
+        tablesPanel.add(titledTable("Doctor's clinical feedback", clinicalFeedbackModel));
+        add(tablesPanel, BorderLayout.CENTER);
 
-        JPanel prescriptionsPanel = new JPanel(new BorderLayout());
-        prescriptionsPanel.add(new JLabel("Prescriptions"), BorderLayout.NORTH);
-        prescriptionsPanel.add(new JScrollPane(new JTable(prescriptionsModel)), BorderLayout.CENTER);
         JButton refreshButton = new JButton("Refresh");
-        prescriptionsPanel.add(refreshButton, BorderLayout.SOUTH);
-
-        add(assessmentsPanel);
-        add(prescriptionsPanel);
+        add(refreshButton, BorderLayout.SOUTH);
 
         refreshButton.addActionListener(e -> loadHistory());
         loadHistory();
+    }
+
+    private static DefaultTableModel readOnlyModel(String... columns) {
+        return new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+    }
+
+    private JPanel titledTable(String title, DefaultTableModel model) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JLabel(title), BorderLayout.NORTH);
+        panel.add(new JScrollPane(new JTable(model)), BorderLayout.CENTER);
+        return panel;
     }
 
     private void loadHistory() {
@@ -64,6 +68,13 @@ public class MedicalHistoryPanel extends JPanel {
         for (String[] row : FileHandler.readRecords(Constants.PRESCRIPTIONS_FILE)) {
             if (row[2].equals(patient.getPatientID())) {
                 prescriptionsModel.addRow(new Object[] { row[0], row[3], row[4], row[5], row[6], row[7] });
+            }
+        }
+
+        clinicalFeedbackModel.setRowCount(0);
+        for (String[] row : FileHandler.readRecords(Constants.CLINICAL_FEEDBACK_FILE)) {
+            if (row[3].equals(patient.getPatientID())) {
+                clinicalFeedbackModel.addRow(new Object[] { row[1], row[2], row[4], row[5] });
             }
         }
     }

@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -31,7 +30,8 @@ public class UserManagementPanel extends JPanel {
     private final JTable table = new JTable(tableModel);
     private final JComboBox<String> filterBox = new JComboBox<>(
             new String[] { "ALL", Constants.ROLE_ADMIN, Constants.ROLE_MANAGER, Constants.ROLE_DOCTOR, Constants.ROLE_PATIENT });
-    private final JTextField statusField = new JTextField(10);
+    private final JComboBox<String> statusBox = new JComboBox<>(
+            new String[] { Constants.STATUS_ACTIVE, Constants.STATUS_INACTIVE });
 
     public UserManagementPanel() {
         setLayout(new BorderLayout());
@@ -47,7 +47,7 @@ public class UserManagementPanel extends JPanel {
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.add(new JLabel("New status:"));
-        bottomPanel.add(statusField);
+        bottomPanel.add(statusBox);
         JButton updateStatusButton = new JButton("Update status of selected");
         JButton deleteButton = new JButton("Delete selected");
         bottomPanel.add(updateStatusButton);
@@ -95,11 +95,7 @@ public class UserManagementPanel extends JPanel {
         if (userID == null) {
             return;
         }
-        String newStatus = statusField.getText().trim().toUpperCase();
-        if (newStatus.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Enter a status (e.g. ACTIVE or INACTIVE).");
-            return;
-        }
+        String newStatus = (String) statusBox.getSelectedItem();
         List<String[]> records = FileHandler.readRecords(Constants.USERS_FILE);
         for (String[] row : records) {
             if (row[0].equals(userID)) {

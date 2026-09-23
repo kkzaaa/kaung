@@ -2,6 +2,7 @@ package hms.gui;
 
 import hms.model.User;
 import hms.service.UserManager;
+import hms.util.Validator;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -54,8 +55,16 @@ public class ProfilePanel extends JPanel {
     }
 
     private void save() {
-        if (fullNameField.getText().isBlank() || emailField.getText().isBlank()) {
-            JOptionPane.showMessageDialog(this, "Full name and email cannot be empty.");
+        if (fullNameField.getText().isBlank() || emailField.getText().isBlank() || passwordField.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Full name, email and password cannot be empty.");
+            return;
+        }
+        if (!Validator.isValidEmail(emailField.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Invalid email format (e.g. name@hms.com).");
+            return;
+        }
+        if (!contactField.getText().isBlank() && !Validator.isValidContact(contactField.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Invalid contact number (digits only, e.g. 0121234567).");
             return;
         }
         user.setFullName(fullNameField.getText());

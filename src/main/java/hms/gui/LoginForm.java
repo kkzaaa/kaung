@@ -2,6 +2,7 @@ package hms.gui;
 
 import hms.model.User;
 import hms.service.AuthService;
+import hms.util.Constants;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -47,6 +48,10 @@ public class LoginForm extends JPanel {
             User user = authService.login(usernameField.getText(), new String(passwordField.getPassword()));
             if (user == null) {
                 errorLabel.setText("Invalid username or password.");
+                return;
+            }
+            if (Constants.STATUS_INACTIVE.equals(user.getStatus())) {
+                errorLabel.setText("This account is inactive. Please contact the admin.");
                 return;
             }
             errorLabel.setText(" ");

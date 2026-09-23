@@ -127,7 +127,7 @@ public class AssessmentEntryPanel extends JPanel {
         Vector<String> apptIDs = new Vector<>();
         for (String[] row : FileHandler.readRecords(Constants.APPOINTMENTS_FILE)) {
             boolean ownedByDoctor = row[2].equals(doctor.getDoctorID());
-            boolean recordable = row[6].equals(Constants.STATUS_BOOKED) || row[6].equals(Constants.STATUS_COMPLETED);
+            boolean recordable = !row[6].equals(Constants.STATUS_CANCELLED);
             if (ownedByDoctor && recordable) {
                 apptIDs.add(row[0]);
             }

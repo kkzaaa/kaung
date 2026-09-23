@@ -185,6 +185,7 @@ because they call identical code.
 | `feedback.txt` | `feedbackID\|patientID\|doctorID\|apptID\|rating\|comment\|date` |
 | `rates.txt` | `deptID\|baseRate` |
 | `insurance.txt` | `providerName\|status` |
+| `clinicalFeedback.txt` | `feedbackID\|apptID\|doctorID\|patientID\|comment\|date` |
 
 **Worked example — `appointments.txt`:**
 

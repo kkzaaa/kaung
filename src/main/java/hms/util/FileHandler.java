@@ -27,7 +27,7 @@ public class FileHandler {
 
     public static void appendRecord(String filePath, String[] fields) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write(String.join(Constants.DELIMITER, fields));
+            bw.write(toLine(fields));
             bw.newLine();
         } catch (IOException e) {
             System.out.println("Error writing " + filePath + ": " + e.getMessage());
@@ -37,12 +37,22 @@ public class FileHandler {
     public static void rewriteFile(String filePath, List<String[]> records) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, false))) {
             for (String[] r : records) {
-                bw.write(String.join(Constants.DELIMITER, r));
+                bw.write(toLine(r));
                 bw.newLine();
             }
         } catch (IOException e) {
             System.out.println("Error rewriting " + filePath + ": " + e.getMessage());
         }
+    }
+
+    // A "|" or line break inside user-typed text would split one record into broken fields/lines.
+    private static String toLine(String[] fields) {
+        String[] clean = new String[fields.length];
+        for (int i = 0; i < fields.length; i++) {
+            String value = fields[i] == null ? "" : fields[i];
+            clean[i] = value.replace(Constants.DELIMITER, "/").replaceAll("\\R", " ");
+        }
+        return String.join(Constants.DELIMITER, clean);
     }
 
     private FileHandler() {
