@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -93,7 +94,9 @@ public class BookAppointmentPanel extends JPanel {
         gbc.gridx = 1;
         formPanel.add(bookButton, gbc);
 
-        add(formPanel, BorderLayout.NORTH);
+        JPanel formHolder = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        formHolder.add(formPanel);
+        add(formHolder, BorderLayout.NORTH);
 
         JPanel schedulePanel = new JPanel(new BorderLayout());
         schedulePanel.add(new JLabel("Slots already taken for this doctor"), BorderLayout.NORTH);
