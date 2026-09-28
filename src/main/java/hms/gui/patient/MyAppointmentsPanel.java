@@ -101,12 +101,12 @@ public class MyAppointmentsPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "You cannot reschedule to a past date.");
             return;
         }
-        String doctorID = (String) tableModel.getValueAt(table.getSelectedRow(), 1);
-        if (!patientService.isSlotAvailable(doctorID, newDate, newTime)) {
+        try {
+            patientService.rescheduleAppointment(apptID, newDate, newTime);
+        } catch (IllegalStateException e) {
             JOptionPane.showMessageDialog(this, "The doctor is already booked at that time. Choose another slot.");
             return;
         }
-        patientService.rescheduleAppointment(apptID, newDate, newTime);
         loadAppointments();
     }
 

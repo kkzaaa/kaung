@@ -11,12 +11,12 @@ public class RateConfig {
         List<String[]> records = FileHandler.readRecords(Constants.RATES_FILE);
         for (String[] row : records) {
             if (row[0].equals(deptID)) {
-                row[1] = String.valueOf(amount);
+                row[1] = FileHandler.formatAmount(amount);
                 FileHandler.rewriteFile(Constants.RATES_FILE, records);
                 return;
             }
         }
-        FileHandler.appendRecord(Constants.RATES_FILE, new String[] { deptID, String.valueOf(amount) });
+        FileHandler.appendRecord(Constants.RATES_FILE, new String[] { deptID, FileHandler.formatAmount(amount) });
     }
 
     public void toggleInsurance(String providerName) {

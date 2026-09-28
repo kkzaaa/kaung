@@ -38,7 +38,7 @@ public class BillingPanel extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         JPanel formPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
-        formPanel.add(new JLabel("Appointment"));
+        formPanel.add(new JLabel("Completed appointment"));
         formPanel.add(apptBox);
         formPanel.add(new JLabel("Insurance"));
         formPanel.add(insuranceBox);
@@ -60,7 +60,7 @@ public class BillingPanel extends JPanel {
     private void loadData() {
         Vector<String> apptIDs = new Vector<>();
         for (String[] row : FileHandler.readRecords(Constants.APPOINTMENTS_FILE)) {
-            if (!alreadyBilled(row[0])) {
+            if (row[6].equals(Constants.STATUS_COMPLETED) && !alreadyBilled(row[0])) {
                 apptIDs.add(row[0]);
             }
         }
@@ -84,7 +84,7 @@ public class BillingPanel extends JPanel {
     private void generateBill() {
         String apptID = (String) apptBox.getSelectedItem();
         if (apptID == null) {
-            JOptionPane.showMessageDialog(this, "No unbilled appointment available.");
+            JOptionPane.showMessageDialog(this, "No completed appointment is waiting to be billed.");
             return;
         }
         String patientID = null;

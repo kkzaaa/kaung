@@ -116,11 +116,24 @@ public class AssetManagementPanel extends JPanel {
             return;
         }
 
-        String assetID = IdGenerator.nextId(Constants.WARDS_FILE, "W");
+        String assetID = IdGenerator.nextId(Constants.WARDS_FILE, idPrefixFor(type));
         assetManager.addWard(new Ward(assetID, name, type, capacity, status.isBlank() ? "AVAILABLE" : status));
         loadAssets();
         nameField.setText("");
         capacityField.setText("");
+    }
+
+    private String idPrefixFor(String type) {
+        switch (type) {
+            case "CONSULTATION_ROOM":
+                return "R";
+            case "LAB":
+                return "L";
+            case "IMAGING_ROOM":
+                return "IM";
+            default:
+                return "W";
+        }
     }
 
     private void updateStatus() {

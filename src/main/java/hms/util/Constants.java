@@ -1,5 +1,7 @@
 package hms.util;
 
+import java.util.Map;
+
 public class Constants {
     public static final String DELIMITER = "|";
     public static final String DATA_DIR = "data/";
@@ -21,6 +23,26 @@ public class Constants {
     public static final String RATES_FILE = DATA_DIR + "rates.txt";
     public static final String INSURANCE_FILE = DATA_DIR + "insurance.txt";
     public static final String CLINICAL_FEEDBACK_FILE = DATA_DIR + "clinicalFeedback.txt";
+
+    // Number of fields on every line of each file (see docs/TEAM_SPLIT.md section 3.2).
+    public static final Map<String, Integer> FIELD_COUNTS = Map.ofEntries(
+            Map.entry(USERS_FILE, 9),
+            Map.entry(ADMINS_FILE, 2),
+            Map.entry(MANAGERS_FILE, 3),
+            Map.entry(DOCTORS_FILE, 6),
+            Map.entry(PATIENTS_FILE, 6),
+            Map.entry(DEPARTMENTS_FILE, 3),
+            Map.entry(WARDS_FILE, 5),
+            Map.entry(ASSESSMENT_TYPES_FILE, 3),
+            Map.entry(APPOINTMENTS_FILE, 7),
+            Map.entry(ASSESSMENTS_FILE, 9),
+            Map.entry(PRESCRIPTIONS_FILE, 8),
+            Map.entry(LAB_REQUESTS_FILE, 6),
+            Map.entry(BILLING_FILE, 7),
+            Map.entry(FEEDBACK_FILE, 7),
+            Map.entry(RATES_FILE, 2),
+            Map.entry(INSURANCE_FILE, 2),
+            Map.entry(CLINICAL_FEEDBACK_FILE, 6));
 
     public static final String LAB_PENDING = "PENDING";
     public static final String LAB_IN_PROGRESS = "IN_PROGRESS";

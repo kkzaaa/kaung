@@ -2,7 +2,7 @@ package hms.gui;
 
 import hms.model.User;
 import hms.service.AuthService;
-import hms.util.Constants;
+import hms.service.InactiveAccountException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -112,13 +112,15 @@ public class LoginForm extends JPanel {
         outer.add(card);
 
         loginButton.addActionListener(e -> {
-            User user = authService.login(usernameField.getText(), new String(passwordField.getPassword()));
-            if (user == null) {
-                errorLabel.setText("Invalid username or password.");
+            User user;
+            try {
+                user = authService.login(usernameField.getText(), new String(passwordField.getPassword()));
+            } catch (InactiveAccountException ex) {
+                errorLabel.setText("This account is inactive. Please contact the admin.");
                 return;
             }
-            if (Constants.STATUS_INACTIVE.equals(user.getStatus())) {
-                errorLabel.setText("This account is inactive. Please contact the admin.");
+            if (user == null) {
+                errorLabel.setText("Invalid username or password.");
                 return;
             }
             errorLabel.setText(" ");

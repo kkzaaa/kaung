@@ -1,5 +1,7 @@
 package hms.model;
 
+import hms.util.FileHandler;
+
 public class Billing {
     private String billID;
     private String patientID;
@@ -21,7 +23,7 @@ public class Billing {
     }
 
     public String[] toFields() {
-        return new String[] { billID, patientID, apptID, String.valueOf(amount), grade, insuranceStatus, paymentStatus };
+        return new String[] { billID, patientID, apptID, FileHandler.formatAmount(amount), grade, insuranceStatus, paymentStatus };
     }
 
     public static Billing fromFields(String[] f) {

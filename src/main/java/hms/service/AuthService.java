@@ -12,6 +12,7 @@ import java.util.List;
 
 public class AuthService {
 
+    // Returns null for a wrong username/password; throws InactiveAccountException for a deactivated account.
     public User login(String username, String password) {
         List<String[]> users = FileHandler.readRecords(Constants.USERS_FILE);
         for (String[] row : users) {
@@ -27,6 +28,9 @@ public class AuthService {
 
             if (!rowUsername.equals(username) || !rowPassword.equals(password)) {
                 continue;
+            }
+            if (!Constants.STATUS_ACTIVE.equals(status)) {
+                throw new InactiveAccountException(rowUsername);
             }
 
             switch (role) {
